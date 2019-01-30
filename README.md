@@ -14,6 +14,27 @@ If you use a plugin manager you can put the whole directory into your `~/.vim/bu
 ## Customization
 To apply customization, apply the variable definitions to your `.vimrc` file.
 
+**Change Indent Starting Column** for Fortran Fixed Format
+
+```vim
+let s:extfname = expand("%:e")
+if s:extfname ==? "f"
+	let g:indentLine_startColumn = 7
+endif
+```
+
+For Fortran fixed format, the started 5 columns are blank or labels and the 6th column is blank or continuation field (&). Usually we take 2 space for Fortran indent:
+```vim
+autocmd FileType fortran setlocal et sta sw=2 
+```
+Using the original [Yggdroot/indentLine](https://github.com/Yggdroot/indentLine) will have this problem for Fortran Fixed Format:  
+
+![Orginal](https://i.imgur.com/SVL6w9t.png)
+
+By setting `g:indentLine_startColumn = 7`, the indentline at the firt 6 columns won't show up:  
+
+![TimoLinIndent](https://i.imgur.com/VNFzb0w.png)
+
 **Change Character Color**
 
 indentLine will overwrite 'conceal' color with grey by default. If you want to highlight conceal color with your colorscheme, disable by:
