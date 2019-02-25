@@ -140,10 +140,13 @@ function! s:IndentLinesEnable()
         endif
 
         let space = &l:shiftwidth == 0 ? &l:tabstop : &l:shiftwidth
+
+        let g:indentLine_startColumn = get(g:, 'indentLine_startColumn', space+1)
+
         let n = len(g:indentLine_char_list)
         let level = 0
-        for i in range(space+1, space * g:indentLine_indentLevel + 1, space)
-            if n > 0
+        for i in range(g:indentLine_startColumn, space * g:indentLine_indentLevel + 1, space)
+             if n > 0
                 let char = g:indentLine_char_list[level % n]
                 let level += 1
             else
@@ -166,6 +169,7 @@ function! s:IndentLinesEnable()
     let g:mysyntaxfile = g:indentLine_mysyntaxfile
 
     let space = &l:shiftwidth == 0 ? &l:tabstop : &l:shiftwidth
+    let g:indentLine_startColumn = get(g:, 'indentLine_startColumn', space+1)
 
     if g:indentLine_showFirstIndentLevel
         execute 'syntax match IndentLine /^ / containedin=ALL conceal cchar=' . g:indentLine_first_char
@@ -177,7 +181,7 @@ function! s:IndentLinesEnable()
         execute 'syntax match IndentLine /\t\zs / contained conceal cchar=' . g:indentLine_char
     else
         let pattern = line('$') < g:indentLine_maxLines ? 'v' : 'c'
-        for i in range(space+1, space * g:indentLine_indentLevel + 1, space)
+        for i in range(g:indentLine_startColumn, space * g:indentLine_indentLevel + 1, space)
             execute 'syntax match IndentLine /\%(^\s\+\)\@<=\%'.i.pattern.' / containedin=ALL conceal cchar=' . g:indentLine_char
         endfor
     endif
